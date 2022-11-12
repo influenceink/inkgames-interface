@@ -1,15 +1,17 @@
 import { Drawer as MuiDrawer, styled, Box, Button, Typography } from '@mui/material';
 import { FC } from 'react';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import { useHistory } from 'react-router-dom';
 
 export const LeftNavMenu : FC = () => {
+    const history = useHistory();
 	return(
         <MenuWrapper>
             <StyledButton>
                 <Typography>PRODUCTS</Typography>
                 <ArrowDropDownIcon />
             </StyledButton>
-            <StyledButton>
+            <StyledButton onClick={() => {history.push('/about-us')}}>
                 <Typography>ABOUT US</Typography>
                 <ArrowDropDownIcon />
             </StyledButton>
