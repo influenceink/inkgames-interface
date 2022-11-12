@@ -45,9 +45,6 @@ const StyledImg = styled('div')`
   display: flex;
   align-items: center;
   justify-content: center;
-  @media screen and (max-width: 660px) {
-    transform: rotate(-90deg);
-  }
 `;
 
 const StyledButton = styled(Button)`

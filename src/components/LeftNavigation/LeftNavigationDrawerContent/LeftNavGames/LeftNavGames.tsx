@@ -27,6 +27,9 @@ const MenuWrapper = styled(Box)`
     flex-direction: column;
     width: 400px;
     margin: 15px;
+    @media screen and (max-width: 660px) {
+		width: initial;
+	}
 `;
 
 const StyledButton = styled(Button)`

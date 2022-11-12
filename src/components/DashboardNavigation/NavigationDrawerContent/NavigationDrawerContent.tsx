@@ -1,9 +1,11 @@
 import { styled, Box, Typography,
 		Button, Divider, Collapse, Avatar, IconButton } from '@mui/material';
-import { FC, useState } from 'react';
+import { FC, useState, useEffect, useContext } from 'react';
 import { NavHeader } from './NavHeader';
 import { makeStyles } from '@mui/styles';
 import { NavFooter } from './NavFooter';
+import { AuthContext } from '../../../contexts';
+import { useHistory } from 'react-router-dom';
 
 import CashSymbol from '../../../assets/img/cashsymbol.png';
 import INKSymbol from '../../../assets/img/inksymbol.png';
@@ -13,7 +15,7 @@ import ViralConnection from '../../../assets/img/viralconnection.png';
 import ZipCode from '../../../assets/img/zipcode.png';
 import EditPhoto from '../../../assets/img/editphoto.png';
 
-import { ArrowDropDown, ArrowDropUp } from '@mui/icons-material';
+import { ArrowDropDown, ArrowDropUp, Lock } from '@mui/icons-material';
 import { ProfileViewer } from './Profile';
 import React from 'react';
 
@@ -36,6 +38,9 @@ type GradientChipProps = {
 export const NavigationDrawerContent = ({ handleClose, openZipcodeNavigation }: NavigationProps) => {
 	const classes = useStyles();
 
+	const {signOut, avatar, email, fullName, inkId} = useContext(AuthContext);
+	const history = useHistory();
+
 	const [openProfile, setOpenProfile] = useState(false);
 	const toggleOpenProfile = () => {
 		setOpenProfile(!openProfile);
@@ -46,39 +51,56 @@ export const NavigationDrawerContent = ({ handleClose, openZipcodeNavigation }: 
         setEditable(!editable);
     }
 
-	function stringAvatar(name: string) {
-		return {
-		  sx: {
-			background: `linear-gradient(to right, #1D1471, #271372, #421277, #6E117F, #AB0F8B, #E10E95)`,
-			color: 'white',
-			width: '64px',
-			height: '64px',
-			fontSize: '30px'
-		  },
-		  children: `${name.split(' ')[0][0]}${name.split(' ')[1][0]}`,
-		};
+	function stringAvatar(name: string | undefined) {
+		if(name != undefined && name != ""){
+			return {
+				sx: {
+				  background: `linear-gradient(to right, #1D1471, #271372, #421277, #6E117F, #AB0F8B, #E10E95)`,
+				  color: 'white',
+				  width: '64px',
+				  height: '64px',
+				  fontSize: '30px'
+				},
+				children: `${name.split(' ')[0][0]}${name.split(' ')[1][0]}`,
+			  };
+		}
+		else return '';
 	}
 
+	const [width, setWidth] = useState<number>(window.innerWidth);
+
+	function handleWindowSizeChange() {
+		setWidth(window.innerWidth);
+	}
+	useEffect(() => {
+		window.addEventListener('resize', handleWindowSizeChange);
+		return () => {
+			window.removeEventListener('resize', handleWindowSizeChange);
+		}
+	}, []);
+
+	const isMobile = width <= 660;
+
 	const fileInput = React.useRef<HTMLInputElement>(null);
-	
+
 	return (
 		<ContentWrapper className={classes.FlexColumn} id='NavContent'>
 			<NavHeader toggleNavigation={handleClose}/>
-			<Box className={classes.FlexColumn} sx={{gap: 2, alignItems: 'center', height: '100%'}}>
+			<Box className={classes.FlexColumn} sx={{gap: 2, alignItems: 'center', mb: '10px'}}>
 				<Box className={classes.FlexColumn} sx={{gap: 0.5, alignItems: 'center'}}>
-					{!editable ? <Avatar {...stringAvatar('THOM MARTINSON')}/> :
+					{!editable ? <Avatar {...stringAvatar(fullName)}/> :
 						<>
 							<IconButton onClick={() => fileInput.current?.click()}>
 								<Box sx={{position: 'relative', '&:hover img':{opacity: 1}}}>
-									<Avatar {...stringAvatar('THOM MARTINSON')}/>
+									<Avatar {...stringAvatar(fullName)}/>
 									<EditPhotoImg src={EditPhoto} alt='editphoto'/>
 								</Box>
 							</IconButton>
 							<input accept="image/*" type="file" id="icon-button-file" style={{display: 'none'}} ref={fileInput}/>
 						</>
 					}
-					<Typography fontSize='0.8rem'>THOM MARTINSON</Typography>
-					<Typography fontSize='0.6rem' color='rgba(255,255,255,0.27)'>@thommartinson</Typography>
+					<Typography fontSize='0.8rem'>{fullName}</Typography>
+					<Typography fontSize='0.6rem' color='rgba(255,255,255,0.27)'>@{inkId}</Typography>
 				</Box>
 				<Box className={classes.FlexColumn} sx={{gap: 1, alignItems: 'center', width: '100%'}}>
 					<ProfileButton onClick={toggleOpenProfile}>
@@ -142,21 +164,44 @@ export const NavigationDrawerContent = ({ handleClose, openZipcodeNavigation }: 
 								</StyledButton>
 							</BalanceBox>
 							<Divider sx={{width: '100%'}}/>
+							{
+								isMobile &&
+									<BalanceBox sx={{background: `linear-gradient(to right, #1D1471, #271372, #421277, #6E117F, #AB0F8B, #E10E95)`, pt: '10px', pb: '10px'}}>
+										<SymbolBox />
+										<Box className={classes.FlexColumn} sx={{alignItems: 'center', width: '100%'}}>
+											<Box sx={{display: 'flex', alignItems: 'center'}}>
+												<Typography sx={{fontSize: '1.5rem', lineHeight: 1}}>INK ELLITE</Typography>
+											</Box>
+											<Typography sx={{fontSize: '0.7rem', color: 'white'}}>Access to Premium</Typography>
+											<Typography sx={{fontSize: '0.4rem', color: 'white'}}>GAIN ACCESS TO PREMIUM FEATURES WITH INK PAY</Typography>
+										</Box>
+										<StyledButton sx={{borderBottomColor: '#1A202D'}} onClick={()=>{handleClose(); openZipcodeNavigation();}}>
+											<ButtonTypography sx={{color: 'white', top: '10px'}}><Lock fontSize='small'/></ButtonTypography>
+										</StyledButton>
+									</BalanceBox>
+							}
+							<Button onClick={() => {
+								signOut();
+								history.push('/');
+								handleClose();
+							}}>Sign Out</Button>
 						</Box>
 					</Collapse>
 				</Box>
 			</Box>
-			<NavFooter />
+			{!isMobile && <NavFooter />}
 		</ContentWrapper>
 	);
 };
 
 const ContentWrapper = styled(Box)`
 	justify-content: space-between;
-	height: 100%;
 	margin: 20px;
 	margin-top: 0px;
 	max-width: 300px;
+	@media screen and (max-width: 660px) {
+		max-width: initial;
+	}
 `;
 
 const ProfileButton = styled(Button)`
@@ -184,6 +229,17 @@ const Symbol = styled('img')`
 	top: 50%;
 	transform: translateY(-50%);
 	left: 10px;
+`;
+
+const SymbolBox = styled(Box)`
+	width: 40px;
+	height: 40px;
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+	left: 20px;
+	border-radius: 50%;
+	background-color: #0B1B3F;
 `;
 
 const StyledButton = styled(Button)`

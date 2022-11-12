@@ -77,4 +77,7 @@ const ContentWrapper = styled(Box)`
 	margin: 20px;
 	margin-top: 0px;
 	max-width: 300px;
+	@media screen and (max-width: 660px) {
+		max-width: initial;
+	}
 `;

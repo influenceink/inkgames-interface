@@ -2,13 +2,11 @@ import { styled, Typography, Box } from '@mui/material';
 import { useContext } from 'react';
 import { Helmet } from 'react-helmet';
 
-import { AppContext } from '../contexts';
 import { APP_TITLE, PAGE_TITLE_CRYPTOCLUB } from '../utils/constants';
 
 import background from '../assets/img/cryptoclub-bg.jpg';
 
 export const Cryptoclub = () => {
-	const context = useContext(AppContext);
 
 	return (
 		<>

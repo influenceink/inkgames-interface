@@ -27,4 +27,7 @@ const Drawer = styled(MuiDrawer)`
 	& .MuiBackdrop-root{
 		background-color: transparent;
 	}
+	@media screen and (max-width: 660px) {
+		max-width: 100vw;
+	}
 `;

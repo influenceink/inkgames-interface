@@ -33,7 +33,6 @@ const MenuWrapper = styled(Box)`
     display: flex;
     gap: 5px;
     flex-direction: column;
-    width: 400px;
     margin: 15px;
 `;
 

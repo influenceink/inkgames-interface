@@ -2,7 +2,6 @@ import { styled, Typography, Box } from '@mui/material';
 import { useContext } from 'react';
 import { Helmet } from 'react-helmet';
 
-import { AppContext } from '../contexts';
 import { APP_TITLE, PAGE_TITLE_ABOUTUS } from '../utils/constants';
 import { AdCard } from '../components/AdCard';
 
@@ -14,7 +13,6 @@ import ad4 from '../assets/img/adFour.png';
 import AboutUsImg from '../assets/img/about-us.png';
 
 export const AboutUs = () => {
-	const context = useContext(AppContext);
 
 	return (
 		<>

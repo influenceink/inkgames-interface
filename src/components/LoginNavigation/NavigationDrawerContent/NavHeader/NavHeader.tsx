@@ -11,7 +11,7 @@ export const NavHeader = ({toggleNavigation} : HeaderProps) => {
 	return(
         <StyledAppBar>
             <HeaderWrapper>
-                <Button onClick={toggleNavigation}>
+                <Button onClick={toggleNavigation} sx={{minWidth: 'initial'}}>
                     <img src={Cross} alt='CrossBtn'/>
                 </Button>
             </HeaderWrapper>
@@ -24,6 +24,10 @@ const HeaderWrapper = styled(Box)`
     width: 300px;
     margin: 10px;
     justify-content: flex-end;
+    @media screen and (max-width: 660px) {
+		width: initial;
+        margin-right: 0px;
+	}
 `;
 
 const StyledAppBar = styled(AppBar)`

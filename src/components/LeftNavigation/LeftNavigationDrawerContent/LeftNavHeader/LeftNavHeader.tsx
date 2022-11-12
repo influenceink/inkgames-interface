@@ -28,6 +28,9 @@ const HeaderWrapper = styled(Box)`
     justify-content: space-between;
     width: 400px;
     margin: 10px;
+    @media screen and (max-width: 660px) {
+		width: initial;
+	}
 `;
 
 const StyledAppBar = styled(AppBar)`
