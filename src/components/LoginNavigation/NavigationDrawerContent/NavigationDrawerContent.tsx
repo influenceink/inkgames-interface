@@ -129,6 +129,9 @@ export const NavigationDrawerContent = ({ handleClose, openDashboard }: Navigati
 					<StyledButton colors={['#1D1471', '#271372', '#421277', '#6E117F', '#AB0F8B', '#E10E95']} onClick={handleSignIn} disabled={loadingStatus}>
 						SIGN IN
 					</StyledButton>
+					<Typography sx={{ color: 'red' }} display={`${errorEmitted ? 'block' : 'none'}`}>
+                		Email or password is wrong.
+              		</Typography>
 					<Box display='flex' gap='10px'>
 						<Typography fontSize='12px'>Don&apos;t have an INK account?</Typography>
 						<Link to='/'><Typography fontSize='12px' color='white'>Sign Up</Typography></Link>
@@ -152,7 +155,7 @@ export const NavigationDrawerContent = ({ handleClose, openDashboard }: Navigati
 					</StyledButton>
 					</> :
 					<>
-					<Typography>We&apos;ve just sent a rest link to your email address.</Typography>
+					<Typography>We&apos;ve just sent a reset link to your email address.</Typography>
 					</>
 				}
 				
