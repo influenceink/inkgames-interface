@@ -38,7 +38,7 @@ type GradientChipProps = {
 export const NavigationDrawerContent = ({ handleClose, openZipcodeNavigation }: NavigationProps) => {
 	const classes = useStyles();
 
-	const {signOut, avatar, email, fullName, inkId} = useContext(AuthContext);
+	const {signOut, avatar, email, fullName, inkId, zipCodes} = useContext(AuthContext);
 	const history = useHistory();
 
 	const [openProfile, setOpenProfile] = useState(false);
@@ -155,7 +155,7 @@ export const NavigationDrawerContent = ({ handleClose, openZipcodeNavigation }: 
 								<Symbol src={ZipCode} alt='zipcodesymbol'/>
 								<Box className={classes.FlexColumn} sx={{alignItems: 'center', width: '100%'}}>
 									<Box sx={{display: 'flex', alignItems: 'center'}}>
-										<Typography sx={{fontSize: '1.5rem', lineHeight: 1}}>17</Typography>
+										<Typography sx={{fontSize: '1.5rem', lineHeight: 1}}>{zipCodes.length}</Typography>
 									</Box>
 									<Typography sx={{fontSize: '0.7rem', color: '#FF1DB4'}}>TOTAL ZIP CODES OWNED</Typography>
 								</Box>
