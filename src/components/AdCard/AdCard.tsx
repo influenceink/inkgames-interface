@@ -28,12 +28,15 @@ export const AdCard = ({imgSrc, title, content, hasReadMore} : AdCardProps) => {
 };
 
 const CardWrapper = styled(Box)`
-    width: 24%;
+    width: 220px;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 8px;
     border: 1px solid #ebe8e8;
+    @media screen and (max-width: 660px) {
+		width: 100%;
+	}
 `;
 
 const StyledButton = styled(Button)`

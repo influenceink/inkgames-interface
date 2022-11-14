@@ -1,5 +1,6 @@
 import { Drawer as MuiDrawer, styled, Box, Button, AppBar } from '@mui/material';
 import { FC } from 'react';
+import { useHistory } from 'react-router-dom';
 
 import Logo from '../../../../assets/img/LeftNavLogo.png';
 import Cross from '../../../../assets/img/LeftNavCross.png';
@@ -9,10 +10,13 @@ interface HeaderProps {
 }
 
 export const LeftNavHeader = ({toggleNavigation} : HeaderProps) => {
+
+    const history = useHistory();
+
 	return(
         <StyledAppBar>
             <HeaderWrapper>
-                <Button>
+                <Button onClick={() =>{history.push('/')}}>
                     <img src={Logo} alt='Logo'/>
                 </Button>
                 <Button onClick={toggleNavigation}>

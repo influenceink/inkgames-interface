@@ -99,8 +99,7 @@ export const Header = ({ toggleNavigation, toggleLoginNavigation }: HeaderProps)
 const StyledAppBar = styled(AppBar)`
 	background: transparent;
 	box-shadow: none;
-	margin: 16px;
-	width: 97%;
+	padding: 16px;
 `;
 
 const StyledMenuIconButton = styled('img')`
