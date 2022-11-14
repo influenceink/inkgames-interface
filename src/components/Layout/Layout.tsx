@@ -39,7 +39,8 @@ export const Layout: FC = ({ children }) => {
 			<LeftNavigation open={open} handleClose={toggleNavigation} />
 			<LoginNavigation open={loginOpen} handleClose={toggleLoginNavigation} openDashboard={toggleDashboardNavigation}/>
 			<DashboardNavigation open={dashboardOpen} handleClose={toggleDashboardNavigation} openZipcodeNavigation={toggleZipcodeNavigation}/>
-			<ZIPCodeNavigation open={zipcodeOpen} handleClose={() => {toggleZipcodeNavigation(); toggleDashboardNavigation();}}/>
+			<ZIPCodeNavigation open={zipcodeOpen} handleBackward={() => {toggleZipcodeNavigation(); toggleDashboardNavigation();}}
+				handleClose={toggleZipcodeNavigation}/>
 			<Box component='main'>
 				{children}
 			</Box>

@@ -12,6 +12,7 @@ import React, {useContext} from 'react';
 import { AuthContext } from '../../../contexts';
 
 interface NavigationProps {
+	handleBackward: () => void;
 	handleClose: () => void;
 }
 
@@ -26,14 +27,14 @@ type GradientChipProps = {
 	colors?: string[];
   };
 
-export const NavigationDrawerContent = ({ handleClose }: NavigationProps) => {
+export const NavigationDrawerContent = ({ handleBackward, handleClose }: NavigationProps) => {
 	const classes = useStyles();
 	
 	const {zipCodes} = useContext(AuthContext);
 
 	return (
 		<ContentWrapper className={classes.FlexColumn} id='NavContent'>
-			<NavHeader toggleNavigation={handleClose}/>
+			<NavHeader toggleNavigation={handleBackward} handleClose={handleClose}/>
 			<Box className={classes.FlexColumn} sx={{gap: 2, alignItems: 'center', height: '100%'}}>
 				<Box className={classes.FlexColumn} sx={{gap: 0.5, alignItems: 'center'}}>
 					<img src={ZipCode} alt='zipcode'/>
