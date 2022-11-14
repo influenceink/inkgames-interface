@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { AppBar, Box, Toolbar, styled, IconButton, Button } from '@mui/material';
+import React, { useState, useContext } from 'react';
+import { AppBar, Box, Toolbar, styled, IconButton, Button, Avatar } from '@mui/material';
 import MenuIcon from '../../assets/img/MenuIcon.png';
 import MenuIconHover from '../../assets/img/MenuIcon-hover.png';
 import logo from '../../assets/img/Logo.png';    
@@ -8,6 +8,7 @@ import { makeStyles } from '@mui/styles';
 import { HeaderNav } from './HeaderNav';
 
 import { Link, NavLink } from 'react-router-dom';
+import { AuthContext } from '../../contexts';
 
 interface HeaderProps {
 	toggleNavigation: () => void;
@@ -37,6 +38,28 @@ export const Header = ({ toggleNavigation, toggleLoginNavigation }: HeaderProps)
 		setShowMenuIcon(false);
 	}
 
+	const {fullName} = useContext(AuthContext);
+
+	function stringAvatar(name: string | undefined) {
+		if(name != undefined && name != ""){
+			return {
+				sx: {
+					borderRadius: '50%',
+					minWidth: '50px',
+					minHeight: '50px',
+					backgroundColor: '#494949',
+					fontSize: '20px',
+					color: 'white',
+					'&:hover': {
+						backgroundColor: '#494949',
+					}
+				},
+				children: `${name.split(' ')[0][0]}${name.split(' ')[1][0]}`,
+			  };
+		}
+		else return '';
+	}
+
 	return (
 		<>
 			<StyledAppBar position='fixed' sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
@@ -63,9 +86,9 @@ export const Header = ({ toggleNavigation, toggleLoginNavigation }: HeaderProps)
 					<HeaderNav />
 					<Box sx={{ flexGrow: 1 }} />
 					<Box sx={{ display: { alignItems: 'center' } }}>
-						<StyledUserAccountBtn onClick={toggleLoginNavigation} >
-							TM
-						</StyledUserAccountBtn>
+						<Button onClick={toggleLoginNavigation} >
+							<Avatar {...stringAvatar(fullName)}/>
+						</Button>	
 					</Box>
 				</Toolbar>
 			</StyledAppBar>
@@ -76,8 +99,7 @@ export const Header = ({ toggleNavigation, toggleLoginNavigation }: HeaderProps)
 const StyledAppBar = styled(AppBar)`
 	background: transparent;
 	box-shadow: none;
-	margin: 16px;
-	width: 97%;
+	padding: 16px;
 `;
 
 const StyledMenuIconButton = styled('img')`
@@ -95,16 +117,4 @@ const StyledLogo = styled('img')`
 	padding-right: 16px;
 	border-left: 1px solid #ffffff;
 	margin-top: 8px;
-`;
-
-const StyledUserAccountBtn = styled(Button)`
-	border-radius: 50%;
-	min-width: 50px;
-	min-height: 50px;
-	background-color: #494949;
-	font-size: 20px;
-	color: white;
-	&:hover{
-		background-color: #494949;
-	}
 `;

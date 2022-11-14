@@ -1,9 +1,10 @@
 import { styled, Box, Button, FilledInput, Typography, 
     InputAdornment, IconButton, Divider, Modal } from '@mui/material';
-import { FC, useState } from 'react';
+import { FC, useState, useEffect, useContext, useCallback } from 'react';
 import { makeStyles } from '@mui/styles';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
+import { SUPPORTED_NETWORKS } from '../../../../utils/constants';
 
 import Cross from '../../../../assets/img/LoginNavCross.png';
 import Coinbase from '../../../../assets/img/coinbase.png';
@@ -11,6 +12,8 @@ import Metamask from '../../../../assets/img/metamask.png';
 import WalletConnect from '../../../../assets/img/walletconnect.png';
 import Formatic from '../../../../assets/img/formatic.png';
 import Portis from '../../../../assets/img/portis.png';
+import WalletIcon from '../../../../assets/img/walleticon.png';
+import { AuthContext, Web3Context } from '../../../../contexts';
 
 interface ProfileViewerProps{
     editable: boolean;
@@ -30,10 +33,20 @@ type GradientChipProps = {
   };
 
 export const ProfileViewer = ({ editable, toggleEditable }: ProfileViewerProps) => {
+
     const classes = useStyles();
 
+    const { account, connected, connect, chainId, switchNetwork } = useContext(Web3Context);
     const [passwordShown, setPasswordShown] = useState(false);
     const [selectWalletModalOpen, setSelectWalletModalOpen] = useState(false);
+    
+    const [network, setNetwork] = useState<string>(SUPPORTED_NETWORKS[0].name);
+
+    const chainValidation = useCallback(() => {
+        const reservedChain = SUPPORTED_NETWORKS.find((value) => value.name === network)?.chainId;
+        return chainId === reservedChain;
+      }, [chainId, network]);
+
 	const togglePassword = () => {
 		// When the handler is invoked
 		// inverse the boolean state of passwordShown
@@ -44,13 +57,37 @@ export const ProfileViewer = ({ editable, toggleEditable }: ProfileViewerProps) 
         setSelectWalletModalOpen(!selectWalletModalOpen);
     }
 
+    const [width, setWidth] = useState<number>(window.innerWidth);
+
+	function handleWindowSizeChange() {
+		setWidth(window.innerWidth);
+	}
+	useEffect(() => {
+		window.addEventListener('resize', handleWindowSizeChange);
+		return () => {
+			window.removeEventListener('resize', handleWindowSizeChange);
+		}
+	}, []);
+
+    const handleWalletConnect = async () => {
+        if ((await connect!()) && !chainValidation()) {
+          const reservedChain = SUPPORTED_NETWORKS.find((value) => value.name === network && value.enabled === true)
+            ?.chainId;
+          await switchNetwork(reservedChain);
+        }
+    };
+
+	const isMobile = width <= 660;
+
+    const {avatar, email, fullName} = useContext(AuthContext);
+
 	return(
         <Box className={classes.FlexColumn} sx={{gap: 2}}>
             <Box className={classes.FlexColumn} sx={{gap: 0.5}}>
                 {!editable ? 
                     <>
-                        <ProfileTypography value='Thom V Martinson' disabled/>
-                        <ProfileTypography value='name@emailaddress.com' disabled/>
+                        <ProfileTypography value={fullName} disabled/>
+                        <ProfileTypography value={email} disabled/>
                         <ProfileTypography type={passwordShown ? "text" : "password"} value='Thom V Martinson' disabled
                             endAdornment={
                                 <InputAdornment position="end">
@@ -68,8 +105,8 @@ export const ProfileViewer = ({ editable, toggleEditable }: ProfileViewerProps) 
                         </StyledButton>
                     </> :
                     <>
-                        <Input value='Thom V Martinson' />
-                        <Input value='name@emailaddress.com'/>
+                        <Input value={fullName} />
+                        <Input value={email}/>
                         <Input type={passwordShown ? "text" : "password"} value='Thom V Martinson'
                             endAdornment={
                                 <InputAdornment position="end">
@@ -89,19 +126,34 @@ export const ProfileViewer = ({ editable, toggleEditable }: ProfileViewerProps) 
                 }
             </Box>
             <Divider sx={{width: '100%'}}/>
-            <Box className={classes.FlexColumn} sx={{gap: 1, alignItems: 'center'}}>
-                <Typography sx={{fontSize: '0.7rem'}}>NO WALLET CONNECTED</Typography>
-                <StyledButton colors={['#1D1471', '#271372', '#421277', '#6E117F', '#AB0F8B', '#E10E95']} 
-                    sx={{mt: 0, fontSize: '0.7rem'}}
-                    onClick={toggleSelectWalletModal}
-                >
-                    CONNECT WALLET
-                </StyledButton>
-                <Box display='flex' gap='10px'>
-                    <Typography fontSize='0.6rem'>Don&apos;t have a wallet?</Typography>
-                    <Link to='/'><Typography fontSize='0.6rem' color='white'>Get one</Typography></Link>
-                </Box>
-            </Box>
+            {
+                !isMobile ? 
+                <Box className={classes.FlexColumn} sx={{gap: 1, alignItems: 'center'}}>
+                    <Typography sx={{fontSize: '0.7rem'}}>NO WALLET CONNECTED</Typography>
+                    <StyledButton colors={['#1D1471', '#271372', '#421277', '#6E117F', '#AB0F8B', '#E10E95']} 
+                        sx={{mt: 0, fontSize: '0.7rem'}}
+                        onClick={handleWalletConnect}
+                    >
+                        CONNECT WALLET
+                    </StyledButton>
+                    <Box display='flex' gap='10px'>
+                        <Typography fontSize='0.6rem'>Don&apos;t have a wallet?</Typography>
+                        <Link to='/'><Typography fontSize='0.6rem' color='white'>Get one</Typography></Link>
+                    </Box>
+                </Box> :
+                <BalanceBox onClick={handleWalletConnect}>
+                    <SymbolBox >
+                        <img src={WalletIcon} alt='wallet icon' width='16px' height='16px'/>
+                    </SymbolBox>
+                    <Box className={classes.FlexColumn} sx={{alignItems: 'center', width: '100%'}}>
+                        <Box sx={{display: 'flex', alignItems: 'center'}}>
+                            <Typography sx={{fontSize: '1.2rem', lineHeight: 1, color: 'white'}}>CONNECT WALLET</Typography>
+                        </Box>
+                        <Typography sx={{fontSize: '0.6rem', color: 'white'}}>You Don&apos;t have a wallet connected</Typography>
+                    </Box>
+                </BalanceBox>
+            }
+            
             <Divider sx={{width: '100%'}}/>
             <SelectWalletModal
                 open={selectWalletModalOpen}
@@ -119,8 +171,8 @@ export const ProfileViewer = ({ editable, toggleEditable }: ProfileViewerProps) 
                     <ModalContentWrapper>
                         <Typography sx={{fontSize: '0.8rem'}}>CONNECT WALLET</Typography>
                         <Box className={classes.FlexColumn} sx={{gap: 1.5}}>
-                            <WalletBox colors={['#1A202D', '#0054FC']}>
-                                <Typography sx={{fontSize: '0.7rem'}}>Coinbase</Typography>
+                            <WalletBox colors={['#1A202D', '#0054FC']} >
+                                <Typography sx={{fontSize: '0.7rem'}} >Coinbase</Typography>
                                 <WalletIconBox><img src={Coinbase} alt='Coinbase' height='20px'/></WalletIconBox>
                             </WalletBox>
                             <WalletBox colors={['#131416', '#D66D1C']}>
@@ -226,7 +278,7 @@ const ModalContentWrapper = styled(Box)`
     margin: 20px 10px;
 `;
 
-const WalletBox = styled(Box)<GradientChipProps>(({ colors }) => ({
+const WalletBox = styled(Button)<GradientChipProps>(({ colors }) => ({
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -243,5 +295,27 @@ const WalletIconBox = styled(Box)`
     height: 25px;
     display: flex;
     align-items:center;
+    justify-content: center;
+`;
+
+const BalanceBox = styled(Button)`
+	padding: 20px 0px;
+	border-radius: 5px;
+	width: 100%;
+	position: relative;
+    background: linear-gradient(to right, #1D1471, #271372, #421277, #6E117F, #AB0F8B, #E10E95);
+`;
+
+const SymbolBox = styled(Box)`
+	width: 40px;
+	height: 40px;
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+	left: 10px;
+	border-radius: 50%;
+	background-color: #0B1B3F;
+    display: flex;
+    align-items: center;
     justify-content: center;
 `;

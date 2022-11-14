@@ -2,16 +2,24 @@ import { FC, useState } from 'react';
 import { Button, styled, Typography } from '@mui/material';
 import { SocialButtonGroup } from './SocialButtonGroup';
 
-export const RightSocialBar: FC = () => {
+interface RightSocialBarProps {
+  color: string
+}
+
+const COLORS: Record<RightSocialBarProps['color'], string> = {
+
+}
+
+export const RightSocialBar = ({color} : RightSocialBarProps) => {
   return (
     <RightBarWrapper>
-      <SocialButtonGroup />
+      <SocialButtonGroup color={color}/>
     </RightBarWrapper>
   );
 };
 
 const RightBarWrapper = styled('div')`
-  position: absolute;
+  position: fixed;
   right: 0px;
   top: 0px;
   height: 100vh;
@@ -21,6 +29,6 @@ const RightBarWrapper = styled('div')`
   gap: 12px;
   align-items: flex-end;
   @media screen and (max-width: 660px) {
-    visibility: hidden;
+    justify-content: flex-end;
   }
 `;

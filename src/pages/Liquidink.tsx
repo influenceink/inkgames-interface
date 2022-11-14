@@ -1,14 +1,13 @@
 import { styled, Typography, Box } from '@mui/material';
 import { useContext } from 'react';
 import { Helmet } from 'react-helmet';
+import { RightSocialBar } from '../components/RightSocialBar';
 
-import { AppContext } from '../contexts';
 import { APP_TITLE, PAGE_TITLE_LIQUIDINK } from '../utils/constants';
 
 import background from '../assets/img/liquidink-bg.jpg';
 
 export const Liquidink = () => {
-	const context = useContext(AppContext);
 
 	return (
 		<>
@@ -20,6 +19,7 @@ export const Liquidink = () => {
 			<StyledBox>
 
 			</StyledBox>
+			<RightSocialBar color='#FFE500'/>
 		</>
 	);
 };

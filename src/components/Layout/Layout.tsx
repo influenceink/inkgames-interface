@@ -1,9 +1,8 @@
-import { FC, useState } from 'react';
+import { FC, useState, useContext } from 'react';
 import { styled, Box } from '@mui/material';
 import { Header } from '../Header';
 import { Footer } from '../Footer';
 import { PlayMusic } from '../PlayMusic';
-import {RightSocialBar} from '../RightSocialBar';
 import {ScrollDown} from '../ScrollDown';
 
 import { FOOTER_HEIGHT } from '../../utils/constants';
@@ -14,7 +13,12 @@ import { LoginNavigation } from '../LoginNavigation';
 import { DashboardNavigation } from '../DashboardNavigation';
 import { ZIPCodeNavigation } from '../ZIPCodeNavigation';
 
+import { AuthContext } from '../../contexts';
+
 export const Layout: FC = ({ children }) => {
+
+	const { authorized } = useContext(AuthContext);
+
 	const [open, setOpen] = useState(false);
 	const toggleNavigation = () => setOpen((status) => !status);
 
@@ -30,19 +34,19 @@ export const Layout: FC = ({ children }) => {
 	return (
 		<LayoutWrapper>
 			<Box component='header'>
-				<Header toggleNavigation={toggleNavigation} toggleLoginNavigation={toggleLoginNavigation}/>
+				<Header toggleNavigation={toggleNavigation} toggleLoginNavigation={authorized ? toggleDashboardNavigation : toggleLoginNavigation}/>
 			</Box>
 			<LeftNavigation open={open} handleClose={toggleNavigation} />
 			<LoginNavigation open={loginOpen} handleClose={toggleLoginNavigation} openDashboard={toggleDashboardNavigation}/>
 			<DashboardNavigation open={dashboardOpen} handleClose={toggleDashboardNavigation} openZipcodeNavigation={toggleZipcodeNavigation}/>
-			<ZIPCodeNavigation open={zipcodeOpen} handleClose={() => {toggleZipcodeNavigation(); toggleDashboardNavigation();}}/>
+			<ZIPCodeNavigation open={zipcodeOpen} handleBackward={() => {toggleZipcodeNavigation(); toggleDashboardNavigation();}}
+				handleClose={toggleZipcodeNavigation}/>
 			<Box component='main'>
 				{children}
 			</Box>
 			<Box>
 				<PlayMusic />
 			</Box>
-			<RightSocialBar />
 			<ScrollDown />
 		</LayoutWrapper>
 	);

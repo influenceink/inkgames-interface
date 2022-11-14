@@ -1,26 +1,26 @@
-import { Typography, Box, styled, useMediaQuery } from '@mui/material';
+import { Typography, Box, styled, useMediaQuery, Color } from '@mui/material';
+import { Twitter, Facebook, Instagram, YouTube } from '@mui/icons-material';
 
-import twitter from '../../assets/img/TWIITER.png';
-import facebook from '../../assets/img/FACEBOOK.png';
-import instagram from '../../assets/img/INSTAGRAM.png';
-import youtube from '../../assets/img/YOUTUBE.png';
+interface SocialButtonGroupProps {
+  color: string
+}
 
-export const SocialButtonGroup = () => {
+export const SocialButtonGroup = ({color} : SocialButtonGroupProps) => {
   const sm = useMediaQuery('(max-width: 660px)');
   return (
     <>
       <SocialWrapper>
         <SocialButton href="https://www.twitter.com/inkgames" target="_blank" rel="noreferrer">
-          <img src={twitter} alt="twitter" />
+          <Twitter sx={{color: {color}}}/>
         </SocialButton>
         <SocialButton href="https://www.facebook.com/INKGamesOfficial" target="_blank" rel="noreferrer">
-          <img src={facebook} alt="facebook" />
+          <Facebook sx={{color: {color}}}/>
         </SocialButton>
         <SocialButton href="https://www.instagram.com/inkgamesofficial" target="_blank" rel="noreferrer">
-          <img src={instagram} alt="instagram" />
+          <Instagram sx={{color: {color}}}/>
         </SocialButton>
         <SocialButton href="https://www.youtube.com/channel/UCzu24Zhl-t2Fw2gEG5sGLGg" target="_blank" rel="noreferrer">
-          <img src={youtube} alt="youtube" />
+          <YouTube sx={{color: {color}}}/>
         </SocialButton>
       </SocialWrapper>
     </>
@@ -40,6 +40,7 @@ const SocialWrapper = styled(Box)`
 const SocialButton = styled('a')`
   display: flex;
   margin: 0 1px;
+  transform: rotate(90deg);
   @media screen and (max-width: 660px) {
     img {
       width: 16px;

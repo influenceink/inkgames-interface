@@ -4,13 +4,14 @@ import { NavigationDrawerContent } from './NavigationDrawerContent';
 
 interface NavigationProps {
 	open: boolean | undefined;
+	handleBackward: () => void;
 	handleClose: () => void;
 }
 
-export const ZIPCodeNavigation = ({ open, handleClose }: NavigationProps) => {
+export const ZIPCodeNavigation = ({ open, handleBackward, handleClose }: NavigationProps) => {
 	return (
 		<Drawer open={open} onClose={handleClose} anchor='right'>
-			<NavigationDrawerContent handleClose={handleClose}/>
+			<NavigationDrawerContent handleBackward={handleBackward} handleClose={handleClose}/>
 		</ Drawer>
 	);
 };
@@ -20,8 +21,14 @@ const Drawer = styled(MuiDrawer)`
 	z-index: 1202;
 	& .MuiDrawer-paper{
 		background-color: #131416;
+		@media screen and (max-width: 660px) {
+			width: 100vw;
+		}
 	}
 	& .MuiBackdrop-root{
 		background-color: transparent;
+	}
+	@media screen and (max-width: 660px) {
+		max-width: 100vw;
 	}
 `;

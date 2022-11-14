@@ -1,7 +1,6 @@
 import { styled, Button, Typography } from '@mui/material';
 import {FC} from 'react';
 
-
 export const ScrollDown : FC = () => {
 	return(
 		<PlayMusicWrapper>
@@ -17,6 +16,9 @@ const PlayMusicWrapper = styled('div')`
 	position: absolute;
 	right: 8px;
 	bottom: 32px;
+	@media screen and (max-width: 660px) {
+		visibility: hidden;
+	  }
 `;
 
 const StyledButton = styled(Button)`

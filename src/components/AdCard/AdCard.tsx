@@ -1,8 +1,9 @@
 import { styled, Box, Button, AppBar, Typography } from '@mui/material';
+import React from 'react';
 
 interface AdCardProps {
     imgSrc: string,
-    title: string,
+    title: React.ReactNode,
     content: string,
     hasReadMore?: boolean | true
 }
@@ -10,10 +11,10 @@ interface AdCardProps {
 export const AdCard = ({imgSrc, title, content, hasReadMore} : AdCardProps) => {
 	return(
         <CardWrapper>
-            <img src={imgSrc} alt={title} width='100%' />
+            <img src={imgSrc} alt={imgSrc} width='100%' />
             <Box sx={{display: 'flex', flexDirection: 'column', gap: 1, ml: 1, mr: 1, alignItems: 'flex-start'}}>
-                <Typography fontSize='0.8rem' color='black' fontWeight='600'>{title}</Typography>
-                <Typography fontSize = '0.5rem' color='#181818'>{content}</Typography>
+                {title}
+                <Typography fontSize = '0.6rem' color='#181818'>{content}</Typography>
                 {hasReadMore && 
                     <>
                         <StyledButton>
@@ -27,12 +28,15 @@ export const AdCard = ({imgSrc, title, content, hasReadMore} : AdCardProps) => {
 };
 
 const CardWrapper = styled(Box)`
-    width: 24%;
+    width: 220px;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 8px;
     border: 1px solid #ebe8e8;
+    @media screen and (max-width: 660px) {
+		width: 100%;
+	}
 `;
 
 const StyledButton = styled(Button)`
