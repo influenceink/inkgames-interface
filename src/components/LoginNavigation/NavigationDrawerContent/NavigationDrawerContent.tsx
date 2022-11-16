@@ -14,6 +14,7 @@ import Logo from '../../../assets/img/Logo.png';
 import { Link } from 'react-router-dom';
 import { Visibility } from '@mui/icons-material';
 import { VisibilityOff } from '@mui/icons-material';
+import Loading from '../../../assets/img/loading.gif';
 
 interface NavigationProps {
 	handleClose: () => void;
@@ -127,7 +128,7 @@ export const NavigationDrawerContent = ({ handleClose, openDashboard }: Navigati
 						<Button onClick={toggleForgotPassword} sx={{textTransform: 'initial', textDecoration: 'underline'}}><Typography sx={{color: 'white', fontSize: '12px'}}>Forgot Password?</Typography></Button>
 					</Box>
 					<StyledButton colors={['#1D1471', '#271372', '#421277', '#6E117F', '#AB0F8B', '#E10E95']} onClick={handleSignIn} disabled={loadingStatus}>
-						SIGN IN
+						SIGN IN {loadingStatus && <img src={Loading} alt="" style={{ marginLeft: '10px' }} width="25px" />}
 					</StyledButton>
 					<Typography sx={{ color: 'red' }} display={`${errorEmitted ? 'block' : 'none'}`}>
                 		Email or password is wrong.
