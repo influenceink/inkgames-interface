@@ -169,7 +169,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       if(res.data.status) return;
       console.log(res.data);
       setWeb3UserUploadRequestUrl(res.data.uploadUrl);
-      await avatarUploadPut(file, res.data.uploadUrl, res.data.avatarUrl);
+      await avatarUploadPut(file, res.data.uploadUrl, res.data.avatarProcessingUrl);
     });
   }, [igSessionToken, avatarUploadPut, igUrl]);
   const setLocalStore = useCallback(({ session_token, RememberMe, ig_session_token }) => {
