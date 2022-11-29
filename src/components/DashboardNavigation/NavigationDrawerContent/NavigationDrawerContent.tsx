@@ -1,11 +1,12 @@
 import { styled, Box, Typography,
 		Button, Divider, Collapse, Avatar, IconButton } from '@mui/material';
-import { FC, useState, useEffect, useContext } from 'react';
+import { FC, useState, useEffect, useContext, ChangeEvent } from 'react';
 import { NavHeader } from './NavHeader';
 import { makeStyles } from '@mui/styles';
 import { NavFooter } from './NavFooter';
 import { AuthContext } from '../../../contexts';
 import { useHistory } from 'react-router-dom';
+import { DEFAULT_AVATAR_URL } from '../../../utils/constants';
 
 import CashSymbol from '../../../assets/img/cashsymbol.png';
 import INKSymbol from '../../../assets/img/inksymbol.png';
@@ -38,7 +39,7 @@ type GradientChipProps = {
 export const NavigationDrawerContent = ({ handleClose, openZipcodeNavigation }: NavigationProps) => {
 	const classes = useStyles();
 
-	const {signOut, avatar, email, fullName, inkId, zipCodes} = useContext(AuthContext);
+	const {signOut, avatar, email, fullName, inkId, zipCodes, setAvatar, avatarUploadRequest} = useContext(AuthContext);
 	const history = useHistory();
 
 	const [openProfile, setOpenProfile] = useState(false);
@@ -79,6 +80,13 @@ export const NavigationDrawerContent = ({ handleClose, openZipcodeNavigation }: 
 		}
 	}, []);
 
+	const handleAvatarUpload = async(ev: ChangeEvent<HTMLInputElement>) => {
+		if (ev.target && ev.target.files){
+			await avatarUploadRequest(ev.target.files[0]);
+			//setAvatar(window.URL.createObjectURL(ev.target!.files[0]) || '');
+		}
+	  };
+
 	const isMobile = width <= 660;
 
 	const fileInput = React.useRef<HTMLInputElement>(null);
@@ -88,15 +96,15 @@ export const NavigationDrawerContent = ({ handleClose, openZipcodeNavigation }: 
 			<NavHeader toggleNavigation={handleClose}/>
 			<Box className={classes.FlexColumn} sx={{gap: 2, alignItems: 'center', mb: '10px'}}>
 				<Box className={classes.FlexColumn} sx={{gap: 0.5, alignItems: 'center'}}>
-					{!editable ? <Avatar {...stringAvatar(fullName)}/> :
+					{!editable ? (avatar == DEFAULT_AVATAR_URL ? <Avatar {...stringAvatar(fullName)}/> : <Avatar alt={fullName} src={avatar} sx={{width: 64, height: 64}}/>) :
 						<>
 							<IconButton onClick={() => fileInput.current?.click()}>
 								<Box sx={{position: 'relative', '&:hover img':{opacity: 1}}}>
-									<Avatar {...stringAvatar(fullName)}/>
+									{avatar == DEFAULT_AVATAR_URL ? <Avatar {...stringAvatar(fullName)}/> : <Avatar alt={fullName} src={avatar} sx={{width: 64, height: 64}}/>}
 									<EditPhotoImg src={EditPhoto} alt='editphoto'/>
 								</Box>
 							</IconButton>
-							<input accept="image/*" type="file" id="icon-button-file" style={{display: 'none'}} ref={fileInput}/>
+							<input accept="image/png" type="file" id="upload_avatar" style={{display: 'none'}} ref={fileInput} onChange={handleAvatarUpload}/>
 						</>
 					}
 					<Typography fontSize='0.8rem'>{fullName}</Typography>

@@ -9,6 +9,7 @@ import { HeaderNav } from './HeaderNav';
 
 import { Link, NavLink } from 'react-router-dom';
 import { AuthContext } from '../../contexts';
+import { DEFAULT_AVATAR_URL } from '../../utils/constants';
 
 interface HeaderProps {
 	toggleNavigation: () => void;
@@ -38,7 +39,7 @@ export const Header = ({ toggleNavigation, toggleLoginNavigation }: HeaderProps)
 		setShowMenuIcon(false);
 	}
 
-	const {fullName} = useContext(AuthContext);
+	const {fullName, avatar} = useContext(AuthContext);
 
 	function stringAvatar(name: string | undefined) {
 		if(name != undefined && name != ""){
@@ -87,7 +88,7 @@ export const Header = ({ toggleNavigation, toggleLoginNavigation }: HeaderProps)
 					<Box sx={{ flexGrow: 1 }} />
 					<Box sx={{ display: { alignItems: 'center' } }}>
 						<Button onClick={toggleLoginNavigation} >
-							<Avatar {...stringAvatar(fullName)}/>
+							{avatar == DEFAULT_AVATAR_URL ? <Avatar {...stringAvatar(fullName)}/> : <Avatar alt={fullName} src={avatar} sx={{width: 50, height: 50}}/>}
 						</Button>	
 					</Box>
 				</Toolbar>
