@@ -15,6 +15,8 @@ export const DRAWER_WIDTH = 250;
 export const DARK_MODE_THEME = 'dark';
 export const LIGHT_MODE_THEME = 'light';
 
+export const DEFAULT_AVATAR_URL = 'https://avatars.ip.d.inksrv.com/default.png';
+
 export const SUPPORTED_NETWORKS = [
     {
       chainId: 1,
