@@ -39,7 +39,7 @@ type GradientChipProps = {
 export const NavigationDrawerContent = ({ handleClose, openZipcodeNavigation }: NavigationProps) => {
 	const classes = useStyles();
 
-	const {signOut, avatar, email, fullName, inkId, zipCodes, setAvatar, avatarUploadRequest} = useContext(AuthContext);
+	const {signOut, avatar, email, fullName, inkId, zipCodes, setAvatar, avatarUploadRequest, viralCount, directCount} = useContext(AuthContext);
 	const history = useHistory();
 
 	const [openProfile, setOpenProfile] = useState(false);
@@ -149,12 +149,12 @@ export const NavigationDrawerContent = ({ handleClose, openZipcodeNavigation }: 
 							<Box sx={{display: 'flex', width: '100%', alignItems:'center', justifyContent:'space-between'}}>
 								<BalanceBox className={classes.FlexColumn} sx={{width: '48%', alignItems:'center', padding: '10px 0px'}}>
 									<img src={DirectConnection} alt='DirectConnection' width='35px'/>
-									<Typography sx={{fontSize: '1.3rem', lineHeight: 1}}>2534</Typography>
+									<Typography sx={{fontSize: '1.3rem', lineHeight: 1}}>{directCount}</Typography>
 									<Typography sx={{fontSize: '0.7rem', color: '#6E6EF9'}}>DIRECT CONNECTIONS</Typography>
 								</BalanceBox>
 								<BalanceBox className={classes.FlexColumn} sx={{width: '48%', alignItems:'center', padding: '10px 0px'}}>
 									<img src={ViralConnection} alt='ViralConnection' width='35px'/>
-									<Typography sx={{fontSize: '1.3rem', lineHeight: 1}}>5365</Typography>
+									<Typography sx={{fontSize: '1.3rem', lineHeight: 1}}>{viralCount}</Typography>
 									<Typography sx={{fontSize: '0.7rem', color: '#E2FF10'}}>VIRAL CONNECTIONS</Typography>
 								</BalanceBox>
 							</Box>
